@@ -23,6 +23,9 @@ if (NOT OROCOS-RTT_FOUND)
 endif()
 
 find_package(rtt-core-extensions REQUIRED)
+find_package(urdf REQUIRED COMPONENTS)
+find_package(srdfdom REQUIRED COMPONENTS)
+
 include_directories(${RTT-CORE-EXTENSIONS_INCLUDE_DIRS})
 link_directories(${RTT-CORE-EXTENSIONS_LIBRARY_DIRS})
 
@@ -84,7 +87,7 @@ orocos_component(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/orocos_ros_join
 # You may add multiple orocos_plugin/orocos_service statements.
 
 # target_link_libraries()
-target_link_libraries(${CMAKE_PROJECT_NAME} ${RST-RT_LIBRARIES} ${RTT-CORE-EXTENSIONS_LIBRARIES})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${RST-RT_LIBRARIES} ${RTT-CORE-EXTENSIONS_LIBRARIES} ${urdf_LIBRARIES})
  
 #
 # Additional headers (not in typekit):

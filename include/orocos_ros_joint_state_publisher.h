@@ -1,22 +1,18 @@
-/* Author: Pouya Mohammadi
- * Date:   09/06/2016
- *
- * Description: This is a simple orocos/rtt component template. It should be
- *              modified and extended by users to accomodate their needs.
- */
-
-#ifndef SIMPLERTTCOMPONENT_HPP
-#define SIMPLERTTCOMPONENT_HPP
+#ifndef OROCOS_ROS_JOINT_STATE_PUBLISHER_H
+#define OROCOS_ROS_JOINT_STATE_PUBLISHER_H
 
 // RTT header files. Might missing some or some be unused
 #include <rtt/RTT.hpp>
 #include <string>
+#include <rst-rt/robot/JointState.hpp>
+#include <rtt/TaskContext.hpp>
+#include <rtt/Component.hpp>
+#include <rtt/Port.hpp>
+#include <urdf/model.h>
 
-#define ROBOT_DOF_SIZE 7
-
-class RttComponent: public RTT::TaskContext {
+class orocos_ros_joint_state_publisher: public RTT::TaskContext {
 public:
-    RttComponent(std::string const & name);
+    orocos_ros_joint_state_publisher(std::string const & name);
 
     // RTT::TaskContext methods that are needed for any standard component and
     // should be implemented by user
@@ -27,8 +23,13 @@ public:
     void cleanupHook();
 
 private:
-	// Declare ports and their datatypes
-
+    bool loadURDFAndSRDF(const std::string& URDF_path, const std::string& SRDF_path);
+    bool attachToRobot(const std::string& robot_name);
+    std::string _urdf_path;
+    std::string _srdf_path;
+    boost::shared_ptr<urdf::Model> _urdf_model; // A URDF Model
+    std::vector<std::string> _joint_list;
+    std::string _robot_name;
 };
 
-#endif // SIMPLERTTCOMPONENT_HPP
+#endif // OROCOS_ROS_JOINT_STATE_PUBLISHER_H
