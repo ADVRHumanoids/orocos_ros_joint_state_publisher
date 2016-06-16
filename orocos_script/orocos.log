@@ -1,0 +1,111 @@
+0.000 [ Info   ][Logger] No ORO_LOGLEVEL environment variable set.
+0.000 [ Info   ][Logger]  OROCOS version '2.7.0' compiled with GCC 4.8.4. Running in GNU/Linux.
+0.000 [ Info   ][Logger] Orocos Logging Activated at level : [ Warning] ( 4 ) 
+0.000 [ Info   ][Logger] Reference System Time is : 1466093099348066935 ticks ( 1.46609e+09 seconds ).
+0.000 [ Info   ][Logger] Logging is relative to this time.
+0.000 [ Info   ][Logger] RTT_COMPONENT_PATH was set to: /home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/robotology-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/opt/ros/indigo/lib/orocos/gnulinux/types:/home/enrico/robotology-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos . Searching in: /home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/robotology-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/opt/ros/indigo/lib/orocos/gnulinux/types:/home/enrico/robotology-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos
+0.000 [ Info   ][Logger] plugin 'rtt' not loaded before.
+0.000 [ Info   ][Logger] Loading plugin libraries from directory /home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/./plugins ...
+0.000 [ Info   ][Logger] Loaded RTT Service 'scripting' from 'rtt-scripting'
+0.001 [ Info   ][Logger] Loaded RTT Service 'marshalling' from 'rtt-marshalling'
+0.001 [ Info   ][Logger] Loading plugin libraries from directory /opt/ros/indigo/lib/orocos/gnulinux/./plugins ...
+0.001 [ Info   ][Logger] typekit 'rtt' not loaded before.
+0.001 [ Info   ][Logger] Loading typekit libraries from directory /home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/./types ...
+0.002 [ Info   ][TypekitRepository::Import] Loading Transport mqueue://rtt-types.
+0.002 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-mqueue-transport' from 'rtt-transport-mqueue'
+0.013 [ Info   ][TypekitRepository::Import] Loading Transport CORBA://rtt-types.
+0.013 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-corba-types' from 'rtt-transport-corba'
+0.029 [ Info   ][TypekitRepository::Import] Loading Typekit rtt-types.
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for int
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for int
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for uint
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for uint
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for double
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for double
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for float
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for float
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for char
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for char
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for bool
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for bool
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for void
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for ConnPolicy
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for TaskContext
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for string
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'mqueue' transport for array
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for array
+0.030 [ Info   ][TypekitRepository::Import] Registered new 'CORBA' transport for rt_string
+0.030 [ Info   ][Logger] Loaded RTT TypeKit/Transport 'rtt-types' from 'rtt-typekit'
+0.030 [ Info   ][Logger] Loading typekit libraries from directory /opt/ros/indigo/lib/orocos/gnulinux/./types ...
+0.030 [ Info   ][Logger] RTT_COMPONENT_PATH was set to: /home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/robotology-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/opt/ros/indigo/lib/orocos/gnulinux/types:/home/enrico/robotology-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos . Searching in: /home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos:/opt/ros/indigo/lib/orocos:/home/enrico/robotology-superbuild/build/install/lib/orocos:/opt/ros/indigo/lib/orocos/gnulinux/plugins:/opt/ros/indigo/lib/orocos/gnulinux/types:/home/enrico/robotology-superbuild/build/external/rtt-gazebo-lwr4plus-sim/orocos
+0.030 [ Info   ][Logger] OCL factory set for real-time logging
+0.030 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='Deployer'
+0.030 [ Info   ][Deployer] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 32036 ).
+0.030 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='GlobalEngine'
+0.031 [ Info   ][GlobalEngine] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 32037 ).
+0.031 [ Info   ][Logger] No site file was found. Importing 'ocl' by default.
+0.031 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl ...
+0.032 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::LuaTLSFComponent'
+0.037 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::logging::Log4cxxAppender'
+0.047 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-reporting-netcdf-gnulinux.so'
+0.047 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::NetcdfReporting'
+0.049 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-timer-gnulinux.so'
+0.049 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-reporting-gnulinux.so'
+0.050 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-common-gnulinux.so'
+0.050 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::LuaComponent'
+0.051 [ Info   ][ComponentLoader::import(path_list)] Loaded component type 'OCL::HelloWorld'
+0.052 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/liborocos-ocl-logging-gnulinux.so'
+0.052 [ Info   ][ComponentLoader::import(path_list)] Loading typekit libraries from directory /home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/types ...
+0.056 [ Info   ][TypekitRepository::Import] Loading Typekit OCLTypekit.
+0.056 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT TypeKit/Transport 'OCLTypekit' from 'ocl'
+0.056 [ Info   ][ComponentLoader::import(path_list)] Loading plugin libraries from directory /home/enrico/robotology-superbuild/orocos_ws/install_isolated/lib/orocos/gnulinux/ocl/plugins ...
+0.056 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'LuaTLSF' from 'rttlua-tlsf-plugin'
+0.057 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'print' from 'print'
+0.057 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'Lua' from 'rttlua-plugin'
+0.059 [ Info   ][ComponentLoader::import(path_list)] Loaded RTT Service 'os' from 'os'
+0.059 [ Info   ][Logger] Loading Service or Plugin scripting in TaskContext Deployer
+0.059 [ Info   ][Logger] Found complete interface of requested service 'scripting'
+0.059 [ Info   ][Logger] Running Script coman_orocos_joint_state_publisher.ops ...
+0.061 [ Info   ][ComponentLoader::import(path_list)] Importing directory /home/enrico/robotology-superbuild/build/install/lib/orocos/gnulinux/orocos_ros_joint_state_publisher ...
+0.074 [ Info   ][ComponentLoader::import(path_list)] Loaded multi component library '/home/enrico/robotology-superbuild/build/install/lib/orocos/gnulinux/orocos_ros_joint_state_publisher/liborocos_ros_joint_state_publisher-gnulinux.so'
+0.075 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='coman_ros_joint_state_publisher'
+0.075 [ Info   ][coman_ros_joint_state_publisher] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 32038 ).
+0.075 [ Info   ][loadComponent] Adding coman_ros_joint_state_publisher as new peer:  OK.
+0.075 [ Info   ][ScriptingService] Robot name: coman
+0.087 [ Info   ][ScriptingService] URDF path: /home/enrico/robotology-superbuild/robots/IITComanRosPkg/coman_urdf/urdf/coman.urdf
+0.087 [ Info   ][ScriptingService] SRDF path: plplplp
+0.121 [ Info   ][ScriptingService] Model name: coman
+0.121 [ Info   ][ScriptingService] Joints: 
+0.121 [ Info   ][ScriptingService]   LAnkLat
+0.121 [ Info   ][ScriptingService]   LAnkSag
+0.121 [ Info   ][ScriptingService]   LElbj
+0.121 [ Info   ][ScriptingService]   LForearmPlate
+0.121 [ Info   ][ScriptingService]   LHipLat
+0.121 [ Info   ][ScriptingService]   LHipSag
+0.121 [ Info   ][ScriptingService]   LHipYaw
+0.121 [ Info   ][ScriptingService]   LKneeSag
+0.121 [ Info   ][ScriptingService]   LShLat
+0.121 [ Info   ][ScriptingService]   LShSag
+0.121 [ Info   ][ScriptingService]   LShYaw
+0.121 [ Info   ][ScriptingService]   LWrj1
+0.121 [ Info   ][ScriptingService]   LWrj2
+0.121 [ Info   ][ScriptingService]   RAnkLat
+0.121 [ Info   ][ScriptingService]   RAnkSag
+0.121 [ Info   ][ScriptingService]   RElbj
+0.121 [ Info   ][ScriptingService]   RForearmPlate
+0.121 [ Info   ][ScriptingService]   RHipLat
+0.121 [ Info   ][ScriptingService]   RHipSag
+0.121 [ Info   ][ScriptingService]   RHipYaw
+0.121 [ Info   ][ScriptingService]   RKneeSag
+0.121 [ Info   ][ScriptingService]   RShLat
+0.121 [ Info   ][ScriptingService]   RShSag
+0.121 [ Info   ][ScriptingService]   RShYaw
+0.121 [ Info   ][ScriptingService]   RWrj1
+0.121 [ Info   ][ScriptingService]   RWrj2
+0.121 [ Info   ][ScriptingService]   WaistLat
+0.121 [ Info   ][ScriptingService]   WaistSag
+0.121 [ Info   ][ScriptingService]   WaistYaw
+0.121 [ Info   ][ScriptingService] Total number of joints is 29
+0.122 [ Info   ][Thread] Creating Thread for scheduler=ORO_SCHED_OTHER, priority=1, CPU affinity=0, with name='TaskBrowser'
+0.122 [ Info   ][TaskBrowser] Thread created with scheduler type 'ORO_SCHED_OTHER', priority 0, cpu affinity 255 and period 0 (PID= 32039 ).
+0.123 [ Info   ][Logger] Entering Task Deployer
