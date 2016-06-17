@@ -8,36 +8,57 @@
 // needed for the macro at the end of this file:
 #include <rtt/Component.hpp>
 #include <rtt/Operation.hpp>
+#include <rtt_roscomm/rtt_rostopic.h>
+#include <rtt_rosclock/rtt_rosclock.h>
 
 
 orocos_ros_joint_state_publisher::orocos_ros_joint_state_publisher(std::string const & name):
     RTT::TaskContext(name),
     _urdf_path(""),
-    _srdf_path("")
+    _srdf_path(""),
+    _joint_state_port("joint_states_orocos_port")
 {
+    this->setActivity(new RTT::Activity(1, 0.02));
+
     this->addOperation("loadURDFAndSRDF", &orocos_ros_joint_state_publisher::loadURDFAndSRDF,
                 this, RTT::ClientThread);
     this->addOperation("attachToRobot", &orocos_ros_joint_state_publisher::attachToRobot,
                 this, RTT::ClientThread);
 
     _urdf_model.reset(new urdf::Model());
+
+    this->addPort(_joint_state_port).doc("Joint State for ROS");
 }
 
 bool orocos_ros_joint_state_publisher::configureHook()
 {
-    // intializations and object creations go here. Each component should run this before being able to run
+    _joint_state_msg.name = _joint_list;
+    for(unsigned int i = 0; i < _joint_list.size(); ++i)
+    {
+        _joint_state_msg.position.push_back(0.0);
+        _joint_state_msg.effort.push_back(0.0);
+        _joint_state_msg.velocity.push_back(0.0);
+    }
+    RTT::log(RTT::Info)<<"joint_state_msg has been initialized"<<RTT::endlog();
+
     return true;
 }
 
 bool orocos_ros_joint_state_publisher::startHook()
 {
-    // this method starts the component
+    _joint_state_port.createStream(rtt_roscomm::topic("joint_states"));
+
     return true;
 }
 
 void orocos_ros_joint_state_publisher::updateHook()
 {
-    // this is the actual body of a component. it is called on each cycle
+    int pos = find(_joint_state_msg.name.begin(), _joint_state_msg.name.end(), "LShSag") - _joint_state_msg.name.begin();
+    _joint_state_msg.position[pos] = -M_PI_2;
+
+    _joint_state_msg.header.stamp = rtt_rosclock::host_now();
+    _joint_state_port.write(_joint_state_msg);
+
 }
 
 void orocos_ros_joint_state_publisher::stopHook()

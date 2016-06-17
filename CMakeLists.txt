@@ -25,6 +25,10 @@ endif()
 find_package(rtt-core-extensions REQUIRED)
 find_package(urdf REQUIRED COMPONENTS)
 find_package(srdfdom REQUIRED COMPONENTS)
+find_package(rtt_sensor_msgs REQUIRED)
+find_package(orocos-ocl REQUIRED)
+
+message(STATUS "test ${orocos-ocl_LIBRARY_DIRS}")
 
 include_directories(${RTT-CORE-EXTENSIONS_INCLUDE_DIRS})
 link_directories(${RTT-CORE-EXTENSIONS_LIBRARY_DIRS})
@@ -87,7 +91,9 @@ orocos_component(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/orocos_ros_join
 # You may add multiple orocos_plugin/orocos_service statements.
 
 # target_link_libraries()
-target_link_libraries(${CMAKE_PROJECT_NAME} ${RST-RT_LIBRARIES} ${RTT-CORE-EXTENSIONS_LIBRARIES} ${urdf_LIBRARIES})
+target_link_libraries(${CMAKE_PROJECT_NAME} ${RST-RT_LIBRARIES} ${RTT-CORE-EXTENSIONS_LIBRARIES} ${urdf_LIBRARIES}
+                      ${USE_OROCOS_LIBRARIES} ${OROCOS-RTT_LIBRARIES} ${orocos-ocl_LIBRARY_DIRS}/librtt_rostopic-gnulinux.so
+                      ${orocos-ocl_LIBRARY_DIRS}/librtt_rosclock-gnulinux.so)
  
 #
 # Additional headers (not in typekit):

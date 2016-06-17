@@ -9,6 +9,7 @@
 #include <rtt/Component.hpp>
 #include <rtt/Port.hpp>
 #include <urdf/model.h>
+#include <sensor_msgs/JointState.h>
 
 class orocos_ros_joint_state_publisher: public RTT::TaskContext {
 public:
@@ -27,9 +28,11 @@ private:
     bool attachToRobot(const std::string& robot_name);
     std::string _urdf_path;
     std::string _srdf_path;
-    boost::shared_ptr<urdf::Model> _urdf_model; // A URDF Model
+    boost::shared_ptr<urdf::Model> _urdf_model;
     std::vector<std::string> _joint_list;
     std::string _robot_name;
+    sensor_msgs::JointState _joint_state_msg;
+    RTT::OutputPort<sensor_msgs::JointState> _joint_state_port;
 };
 
 #endif // OROCOS_ROS_JOINT_STATE_PUBLISHER_H
