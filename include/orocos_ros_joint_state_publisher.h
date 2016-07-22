@@ -11,6 +11,7 @@
 #include <urdf/model.h>
 #include <sensor_msgs/JointState.h>
 
+
 class orocos_ros_joint_state_publisher: public RTT::TaskContext {
 public:
     orocos_ros_joint_state_publisher(std::string const & name);
@@ -32,7 +33,13 @@ private:
     std::vector<std::string> _joint_list;
     std::string _robot_name;
     sensor_msgs::JointState _joint_state_msg;
+
+    std::map<std::string, std::vector<std::string> > _map_kin_chains_joints;
+
     RTT::OutputPort<sensor_msgs::JointState> _joint_state_port;
+
+    std::map<std::string, boost::shared_ptr<RTT::InputPort<rstrt::robot::JointState> > > _kinematic_chains_feedback_ports;
+    std::map<std::string, rstrt::robot::JointState> _kinematic_chains_joint_state_map;
 };
 
 #endif // OROCOS_ROS_JOINT_STATE_PUBLISHER_H

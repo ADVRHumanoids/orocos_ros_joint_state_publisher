@@ -10,6 +10,7 @@
 #include <rtt/Operation.hpp>
 #include <rtt_roscomm/rtt_rostopic.h>
 #include <rtt_rosclock/rtt_rosclock.h>
+#include <rtt/OperationCaller.hpp>
 
 
 orocos_ros_joint_state_publisher::orocos_ros_joint_state_publisher(std::string const & name):
@@ -53,8 +54,24 @@ bool orocos_ros_joint_state_publisher::startHook()
 
 void orocos_ros_joint_state_publisher::updateHook()
 {
-    int pos = find(_joint_state_msg.name.begin(), _joint_state_msg.name.end(), "LShSag") - _joint_state_msg.name.begin();
-    _joint_state_msg.position[pos] = -M_PI_2;
+    std::map<std::string, std::vector<std::string> >::iterator it;
+    for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
+    {
+        RTT::FlowStatus fs = _kinematic_chains_feedback_ports.at(it->first)->read(
+                    _kinematic_chains_joint_state_map.at(it->first));
+
+        for(unsigned int i = 0; i < it->second.size(); ++i){
+            int pos = find(_joint_state_msg.name.begin(), _joint_state_msg.name.end(),
+                           it->second[i]) - _joint_state_msg.name.begin();
+            _joint_state_msg.position[pos] =
+                    _kinematic_chains_joint_state_map.at(it->first).angles[i];
+            _joint_state_msg.velocity[pos] =
+                    _kinematic_chains_joint_state_map.at(it->first).velocities[i];
+            _joint_state_msg.effort[pos] =
+                    _kinematic_chains_joint_state_map.at(it->first).torques[i];
+        }
+    }
+
 
     _joint_state_msg.header.stamp = rtt_rosclock::host_now();
     _joint_state_port.write(_joint_state_msg);
@@ -104,6 +121,41 @@ bool orocos_ros_joint_state_publisher::attachToRobot(const std::string &robot_na
 {
     _robot_name = robot_name;
     RTT::log(RTT::Info)<<"Robot name: "<<_robot_name<<RTT::endlog();
+
+    RTT::TaskContext* task_ptr = this->getPeer(robot_name);
+    if(!task_ptr){
+        RTT::log(RTT::Error)<<"Can not getPeer("<<robot_name<<")"<<RTT::endlog();
+        return false;}
+
+    RTT::log(RTT::Info)<<"Found Peer "<<robot_name<<RTT::endlog();
+
+    RTT::OperationCaller<std::map<std::string, std::vector<std::string> >(void) > getKinematicChainsAndJoints
+        = task_ptr->getOperation("getKinematicChainsAndJoints");
+
+    _map_kin_chains_joints = getKinematicChainsAndJoints();
+
+    std::map<std::string, std::vector<std::string> >::iterator it;
+    for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
+    {
+        std::string kin_chain_name = it->first;
+        std::vector<std::string> joint_names = it->second;
+
+        _kinematic_chains_feedback_ports[kin_chain_name] =
+            boost::shared_ptr<RTT::InputPort<rstrt::robot::JointState> >(
+                        new RTT::InputPort<rstrt::robot::JointState>(
+                            kin_chain_name+"_"+"JointFeedback"));
+        this->addPort(*(_kinematic_chains_feedback_ports.at(kin_chain_name))).
+                doc(kin_chain_name+"_"+"JointFeedback port");
+
+        _kinematic_chains_feedback_ports.at(kin_chain_name)->connectTo(
+                    task_ptr->ports()->getPort(kin_chain_name+"_"+"JointFeedback"));
+
+        rstrt::robot::JointState tmp(joint_names.size());
+        _kinematic_chains_joint_state_map[kin_chain_name] = tmp;
+        RTT::log(RTT::Info)<<"Added "<<kin_chain_name<<" port and data"<<RTT::endlog();
+    }
+
+    return true;
 }
 
 // This macro, as you can see, creates the component. Every component should have this!
