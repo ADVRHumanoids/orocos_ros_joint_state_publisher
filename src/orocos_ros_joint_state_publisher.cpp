@@ -49,11 +49,20 @@ bool orocos_ros_joint_state_publisher::startHook()
 {
     _joint_state_port.createStream(rtt_roscomm::topic("joint_states"));
 
+    std::map<std::string, boost::shared_ptr<RTT::OutputPort<geometry_msgs::WrenchStamped> > >::iterator it;
+    for(it = _wrench_ports.begin(); it != _wrench_ports.end(); it++)
+    {
+        this->addPort(*(it->second)).doc(it->first + " State for ROS");
+        it->second->createStream(rtt_roscomm::topic(it->first + "_force_torque_sensor"));
+    }
+
     return true;
 }
 
 void orocos_ros_joint_state_publisher::updateHook()
 {
+    ros::Time tick = rtt_rosclock::host_now();
+
     std::map<std::string, std::vector<std::string> >::iterator it;
     for(it = _map_kin_chains_joints.begin(); it != _map_kin_chains_joints.end(); it++)
     {
@@ -71,10 +80,27 @@ void orocos_ros_joint_state_publisher::updateHook()
                     _kinematic_chains_joint_state_map.at(it->first).torques[i];
         }
     }
-
-
-    _joint_state_msg.header.stamp = rtt_rosclock::host_now();
+    _joint_state_msg.header.stamp = tick;
     _joint_state_port.write(_joint_state_msg);
+
+    std::map<std::string, rstrt::dynamics::Wrench>::iterator it2;
+    for(it2 = _frames_wrenches_map.begin(); it2 != _frames_wrenches_map.end(); it2++)
+    {
+        RTT::FlowStatus fs = _frames_ports_map.at(it2->first)->read(
+                    _frames_wrenches_map.at(it2->first));
+
+        _wrench_msgs.at(it2->first).wrench.force.x = _frames_wrenches_map.at(it2->first).forces[0];
+        _wrench_msgs.at(it2->first).wrench.force.y = _frames_wrenches_map.at(it2->first).forces[1];
+        _wrench_msgs.at(it2->first).wrench.force.z = _frames_wrenches_map.at(it2->first).forces[2];
+        _wrench_msgs.at(it2->first).wrench.torque.x = _frames_wrenches_map.at(it2->first).torques[0];
+        _wrench_msgs.at(it2->first).wrench.torque.y = _frames_wrenches_map.at(it2->first).torques[1];
+        _wrench_msgs.at(it2->first).wrench.torque.z = _frames_wrenches_map.at(it2->first).torques[2];
+
+        _wrench_msgs.at(it2->first).header.frame_id = it2->first;
+        _wrench_msgs.at(it2->first).header.stamp = tick;
+
+        _wrench_ports.at(it2->first)->write(_wrench_msgs.at(it2->first));
+    }
 
 }
 
@@ -155,8 +181,41 @@ bool orocos_ros_joint_state_publisher::attachToRobot(const std::string &robot_na
         RTT::log(RTT::Info)<<"Added "<<kin_chain_name<<" port and data"<<RTT::endlog();
     }
 
+
+    RTT::OperationCaller<std::vector<std::string> (void) > getForceTorqueSensorsFrames
+        = task_ptr->getOperation("getForceTorqueSensorsFrames");
+    std::vector<std::string> ft_sensors_frames = getForceTorqueSensorsFrames();
+    for(unsigned int i = 0; i < ft_sensors_frames.size(); ++i)
+    {
+        _frames_ports_map[ft_sensors_frames[i]] =
+                boost::shared_ptr<RTT::InputPort<rstrt::dynamics::Wrench> >(
+                    new RTT::InputPort<rstrt::dynamics::Wrench>(
+                        ft_sensors_frames[i]+"_SensorFeedback"));
+        this->addPort(*(_frames_ports_map.at(ft_sensors_frames[i]))).
+                doc(ft_sensors_frames[i]+"_SensorFeedback port");
+
+        _frames_ports_map.at(ft_sensors_frames[i])->connectTo(
+                    task_ptr->ports()->getPort(ft_sensors_frames[i]+"_SensorFeedback"));
+
+        rstrt::dynamics::Wrench tmp;
+        _frames_wrenches_map[ft_sensors_frames[i]] = tmp;
+
+        geometry_msgs::WrenchStamped tmp2;
+        tmp2.wrench.force.x = 0.; tmp2.wrench.torque.x = 0.;
+        tmp2.wrench.force.y = 0.; tmp2.wrench.torque.y = 0.;
+        tmp2.wrench.force.z = 0.; tmp2.wrench.torque.z = 0.;
+        _wrench_msgs[ft_sensors_frames[i]] = tmp2;
+
+        _wrench_ports[ft_sensors_frames[i]] =
+                boost::shared_ptr<RTT::OutputPort<geometry_msgs::WrenchStamped> >(
+                    new RTT::OutputPort<geometry_msgs::WrenchStamped>(
+                        ft_sensors_frames[i]+"_orocos_port"));
+        RTT::log(RTT::Info)<<"Added "<<ft_sensors_frames[i]<<" port and data"<<RTT::endlog();
+    }
+
     return true;
 }
 
 // This macro, as you can see, creates the component. Every component should have this!
-ORO_CREATE_COMPONENT_LIBRARY()ORO_LIST_COMPONENT_TYPE(orocos_ros_joint_state_publisher)
+ORO_CREATE_COMPONENT_LIBRARY()
+ORO_LIST_COMPONENT_TYPE(orocos_ros_joint_state_publisher)
