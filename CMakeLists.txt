@@ -91,9 +91,18 @@ orocos_component(${CMAKE_PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/orocos_ros_join
 # You may add multiple orocos_plugin/orocos_service statements.
 
 # target_link_libraries()
-target_link_libraries(${CMAKE_PROJECT_NAME} ${RST-RT_LIBRARIES} ${RTT-CORE-EXTENSIONS_LIBRARIES} ${urdf_LIBRARIES}
+
+if(OROCOS_TARGET STREQUAL "xenomai")
+	target_link_libraries(${CMAKE_PROJECT_NAME} ${RST-RT_LIBRARIES} ${RTT-CORE-EXTENSIONS_LIBRARIES} ${urdf_LIBRARIES}
+                      ${USE_OROCOS_LIBRARIES} ${OROCOS-RTT_LIBRARIES} 
+		      $ENV{ROBOTOLOGY_ROOT}/orocos_ws/install_isolated/lib/librtt_ros-xenomai.so
+                      $ENV{ROBOTOLOGY_ROOT}/orocos_ws/install_isolated/lib/librtt_rosclock-xenomai.so
+                      $ENV{ROBOTOLOGY_ROOT}/orocos_ws/install_isolated/lib/librtt_rostopic-xenomai.so )
+else()
+	target_link_libraries(${CMAKE_PROJECT_NAME} ${RST-RT_LIBRARIES} ${RTT-CORE-EXTENSIONS_LIBRARIES} ${urdf_LIBRARIES}
                       ${USE_OROCOS_LIBRARIES} ${OROCOS-RTT_LIBRARIES} ${orocos-ocl_LIBRARY_DIRS}/librtt_rostopic-gnulinux.so
                       ${orocos-ocl_LIBRARY_DIRS}/librtt_rosclock-gnulinux.so)
+endif()
  
 #
 # Additional headers (not in typekit):
