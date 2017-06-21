@@ -22,6 +22,7 @@ if (NOT OROCOS-RTT_FOUND)
   message (FATAL_ERROR "\nCould not find Orocos. Please use the shell command\n 'source orocos_toolchain/env.sh' and then run cmake again.")
 endif()
 
+find_package(YCM QUIET)
 find_package(rtt-core-extensions REQUIRED)
 find_package(urdf REQUIRED COMPONENTS)
 find_package(srdfdom REQUIRED COMPONENTS)
