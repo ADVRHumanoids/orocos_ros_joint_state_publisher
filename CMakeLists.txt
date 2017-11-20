@@ -23,17 +23,17 @@ if (NOT OROCOS-RTT_FOUND)
 endif()
 
 find_package(YCM QUIET)
-find_package(rtt-core-extensions REQUIRED)
+find_package(RST-RT REQUIRED)
+message(STATUS "RST-RT version: ${RST-RT_VERSION}")
+include_directories(BEFORE SYSTEM ${RST-RT_INCLUDE_DIRS})
+add_definitions(${RST-RT_CFLAGS})
+link_directories(${RST-RT_LIBRARY_DIR} ${RST-RT_LIBRARY_DIRS})
 find_package(urdf REQUIRED COMPONENTS)
 find_package(srdfdom REQUIRED COMPONENTS)
 find_package(rtt_sensor_msgs REQUIRED)
 find_package(orocos-ocl REQUIRED)
 
 message(STATUS "test ${orocos-ocl_LIBRARY_DIRS}")
-
-include_directories(${RTT-CORE-EXTENSIONS_INCLUDE_DIRS})
-link_directories(${RTT-CORE-EXTENSIONS_LIBRARY_DIRS})
-
 
 # Defines the orocos_* cmake macros. See that file for additional
 # documentation.
