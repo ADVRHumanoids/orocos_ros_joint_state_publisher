@@ -56,6 +56,13 @@ bool orocos_ros_joint_state_publisher::startHook()
         it->second->createStream(rtt_roscomm::topic(it->first + "_force_torque_sensor"));
     }
 
+    std::map<std::string, boost::shared_ptr<RTT::OutputPort<sensor_msgs::Imu> > >::iterator it2;
+    for(it2 = _imu_ports.begin(); it2 != _imu_ports.end(); it2++)
+    {
+        this->addPort(*(it2->second)).doc(it2->first + "State for ROS");
+        it2->second->createStream(rtt_roscomm::topic(it2->first + "_imu_sensor"));
+    }
+
     return true;
 }
 
@@ -100,6 +107,31 @@ void orocos_ros_joint_state_publisher::updateHook()
         _wrench_msgs.at(it2->first).header.stamp = tick;
 
         _wrench_ports.at(it2->first)->write(_wrench_msgs.at(it2->first));
+    }
+
+    std::map<std::string, rstrt::robot::IMU>::iterator it3;
+    for(it3 = _frames_imu_map.begin(); it3 != _frames_imu_map.end(); it3++)
+    {
+        RTT::FlowStatus fs = _imu_frames_ports_map.at(it3->first)->read(
+                    _frames_imu_map.at(it3->first));
+
+        _imu_msgs.at(it3->first).angular_velocity.x = _frames_imu_map.at(it3->first).angularVelocity[0];
+        _imu_msgs.at(it3->first).angular_velocity.y = _frames_imu_map.at(it3->first).angularVelocity[1];
+        _imu_msgs.at(it3->first).angular_velocity.z = _frames_imu_map.at(it3->first).angularVelocity[2];
+
+        _imu_msgs.at(it3->first).linear_acceleration.x = _frames_imu_map.at(it3->first).linearAcceleration[0];
+        _imu_msgs.at(it3->first).linear_acceleration.y = _frames_imu_map.at(it3->first).linearAcceleration[1];
+        _imu_msgs.at(it3->first).linear_acceleration.z = _frames_imu_map.at(it3->first).linearAcceleration[2];
+
+        _imu_msgs.at(it3->first).orientation.w = _frames_imu_map.at(it3->first).rotation[0];
+        _imu_msgs.at(it3->first).orientation.x = _frames_imu_map.at(it3->first).rotation[1];
+        _imu_msgs.at(it3->first).orientation.y = _frames_imu_map.at(it3->first).rotation[2];
+        _imu_msgs.at(it3->first).orientation.z = _frames_imu_map.at(it3->first).rotation[3];
+
+        _imu_msgs.at(it3->first).header.frame_id = it3->first;
+        _imu_msgs.at(it3->first).header.stamp = tick;
+
+        _imu_ports.at(it3->first)->write(_imu_msgs.at(it3->first));
     }
 
 }
@@ -211,6 +243,37 @@ bool orocos_ros_joint_state_publisher::attachToRobot(const std::string &robot_na
                     new RTT::OutputPort<geometry_msgs::WrenchStamped>(
                         ft_sensors_frames[i]+"_orocos_port"));
         RTT::log(RTT::Info)<<"Added "<<ft_sensors_frames[i]<<" port and data"<<RTT::endlog();
+    }
+
+    RTT::OperationCaller<std::vector<std::string> (void) > getIMUSensorsFrames
+        = task_ptr->getOperation("getIMUSensorsFrames");
+    std::vector<std::string> imu_sensors_frames = getIMUSensorsFrames();
+    for(unsigned int i = 0; i < imu_sensors_frames.size(); ++i)
+    {
+        _imu_frames_ports_map[imu_sensors_frames[i]] =
+                boost::shared_ptr<RTT::InputPort<rstrt::robot::IMU> >(
+                    new RTT::InputPort<rstrt::robot::IMU>(
+                        imu_sensors_frames[i]+"_SensorFeedback"));
+        this->addPort(*(_imu_frames_ports_map.at(imu_sensors_frames[i]))).
+                doc(imu_sensors_frames[i]+"_SensorFeedback port");
+
+        _imu_frames_ports_map.at(imu_sensors_frames[i])->connectTo(
+                    task_ptr->ports()->getPort(imu_sensors_frames[i]+"_SensorFeedback"));
+
+        rstrt::robot::IMU tmp;
+        _frames_imu_map[imu_sensors_frames[i]] = tmp;
+
+        sensor_msgs::Imu tmp2;
+        tmp2.angular_velocity.x = 0.; tmp2.angular_velocity.y = 0.; tmp2.angular_velocity.z = 0.;
+        tmp2.linear_acceleration.x = 0.; tmp2.linear_acceleration.y = 0.; tmp2.linear_acceleration.z = 0.;
+        tmp2.orientation.w = 1.; tmp2.orientation.x = 0.; tmp2.orientation.y = 0.; tmp2.orientation.z = 0.;
+        _imu_msgs[imu_sensors_frames[i]] = tmp2;
+
+        _imu_ports[imu_sensors_frames[i]] =
+                boost::shared_ptr<RTT::OutputPort<sensor_msgs::Imu> >(
+                    new RTT::OutputPort<sensor_msgs::Imu>(
+                        imu_sensors_frames[i]+"_orocos_port"));
+        RTT::log(RTT::Info)<<"Added "<<imu_sensors_frames[i]<<" port and data"<<RTT::endlog();
     }
 
     return true;

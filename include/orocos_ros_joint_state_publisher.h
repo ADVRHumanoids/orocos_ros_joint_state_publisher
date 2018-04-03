@@ -5,6 +5,7 @@
 #include <rtt/RTT.hpp>
 #include <string>
 #include <rst-rt/robot/JointState.hpp>
+#include <rst-rt/robot/IMU.hpp>
 #include <rst-rt/dynamics/Wrench.hpp>
 #include <rtt/TaskContext.hpp>
 #include <rtt/Component.hpp>
@@ -12,6 +13,7 @@
 #include <urdf/model.h>
 #include <sensor_msgs/JointState.h>
 #include <geometry_msgs/WrenchStamped.h>
+#include <sensor_msgs/Imu.h>
 
 
 class orocos_ros_joint_state_publisher: public RTT::TaskContext {
@@ -36,18 +38,25 @@ private:
     std::string _robot_name;
     sensor_msgs::JointState _joint_state_msg;
     std::map<std::string, geometry_msgs::WrenchStamped> _wrench_msgs;
+    std::map<std::string, sensor_msgs::Imu> _imu_msgs;
 
     std::map<std::string, std::vector<std::string> > _map_kin_chains_joints;
     std::vector<std::string> _force_torque_sensors_frames;
+    std::vector<std::string> _imu_sensors_frames;
+
 
     RTT::OutputPort<sensor_msgs::JointState> _joint_state_port;
     std::map<std::string, boost::shared_ptr<RTT::OutputPort<geometry_msgs::WrenchStamped> > > _wrench_ports;
+    std::map<std::string, boost::shared_ptr<RTT::OutputPort<sensor_msgs::Imu> > > _imu_ports;
 
     std::map<std::string, boost::shared_ptr<RTT::InputPort<rstrt::robot::JointState> > > _kinematic_chains_feedback_ports;
     std::map<std::string, rstrt::robot::JointState> _kinematic_chains_joint_state_map;
 
     std::map<std::string, boost::shared_ptr<RTT::InputPort<rstrt::dynamics::Wrench> > > _frames_ports_map;
     std::map<std::string, rstrt::dynamics::Wrench> _frames_wrenches_map;
+
+    std::map<std::string, boost::shared_ptr<RTT::InputPort<rstrt::robot::IMU> > > _imu_frames_ports_map;
+    std::map<std::string, rstrt::robot::IMU> _frames_imu_map;
 };
 
 #endif // OROCOS_ROS_JOINT_STATE_PUBLISHER_H
