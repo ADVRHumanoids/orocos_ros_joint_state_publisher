@@ -165,7 +165,7 @@ bool orocos_ros_joint_state_publisher::loadURDFAndSRDF(const std::string &URDF_p
         RTT::log(RTT::Info)<<"Joints: "<<RTT::endlog();
         for(it = joint_map.begin(); it != joint_map.end(); it++)
         {
-            if(it->second->type != urdf::Joint::FIXED){
+            if(it->second->type != urdf::Joint::FIXED && it->second->type != urdf::Joint::FLOATING){
                 _joint_list.push_back(it->first);
                 RTT::log(RTT::Info)<<"  "<<_joint_list.back()<<RTT::endlog();}
         }
