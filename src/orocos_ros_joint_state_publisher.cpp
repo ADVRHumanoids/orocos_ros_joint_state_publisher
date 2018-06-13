@@ -8,7 +8,7 @@
 // needed for the macro at the end of this file:
 #include <rtt/Component.hpp>
 #include <rtt/Operation.hpp>
-#include <rtt_roscomm/rtt_rostopic.h>
+#include <rtt_roscomm/rostopic.h>
 #include <rtt_rosclock/rtt_rosclock.h>
 #include <rtt/OperationCaller.hpp>
 
